@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz do nosso Amor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #ff4081;
+        }
+        .question {
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+        .options {
+            margin: 20px 0;
+        }
+        .option {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option:hover {
+            background-color: #e6336b;
+        }
+        .result {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            font-weight: bold;
+            color: #ff4081;
+        }
+        .heart {
+            font-size: 3rem;
+            color: #ff4081;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .vale {
+            font-size: 1.2rem;
+            color: #4caf50;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz do Amor</h1>
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <div class="result" id="result"></div>
+        <div id="valeChoice"></div>
+    </div>
+
+    <script>
+        const perguntas = [
+            {
+                pergunta: "Quando foi nosso primeiro beijo?",
+                respostas: ["13 de setembro", "14 de outubro", "12 de novembro"],
+                respostaCorreta: 1
+            },
+            {
+                pergunta: "Qual apelido que voce me deu?",
+                respostas: ["neneco", "cu", "amor"],
+                respostaCorreta: 1
+            },
+            {
+                pergunta: "oq voce me falou quando te disse, seus olhos brilham para mim",
+                respostas: [ "te fode", "voce e doido", "vc e estranho"],
+                respostaCorreta: 1
+            }
+        ];
+
+        let acertos = 0;
+        let perguntaAtual = 0;
+
+        function mostrarPergunta() {
+            if (perguntaAtual < perguntas.length) {
+                document.getElementById('question').textContent = perguntas[perguntaAtual].pergunta;
+                let optionsHtml = "";
+                perguntas[perguntaAtual].respostas.forEach((resposta, index) => {
+                    optionsHtml += `<button class="option" onclick="verificarResposta(${index})">${resposta}</button>`;
+                });
+                document.getElementById('options').innerHTML = optionsHtml;
+            } else {
+                mostrarResultado();
+            }
+        }
+
+        function verificarResposta(respostaEscolhida) {
+            if (respostaEscolhida === perguntas[perguntaAtual].respostaCorreta) {
+                acertos++;
+                document.getElementById('result').textContent = "Resposta certa!";
+                document.getElementById('result').classList.add('heart');
+                setTimeout(() => {
+                    document.getElementById('result').classList.remove('heart');
+                }, 1000);
+            } else {
+                document.getElementById('result').textContent = "Resposta errada, mas o amor continua!";
+            }
+
+            perguntaAtual++;
+            setTimeout(mostrarPergunta, 1000);
+        }
+
+        function mostrarResultado() {
+            document.getElementById('question').textContent = "Você completou o quiz!";
+            if (acertos === 3) {
+                document.getElementById('result').textContent = "Parabéns, você acertou tudo! Escolha seu vale especial!";
+                document.getElementById('valeChoice').innerHTML = `
+                    <button class="option" onclick="escolherVale('Vale Date Especial')">Vale Date Especial</button>
+                    <button class="option" onclick="escolherVale('Vale presente')">Vale presente</button>
+                    <button class="option" onclick="escolherVale('Vale dia de serie')">Vale dia de serie</button>
+                `;
+            } else {
+                document.getElementById('result').textContent = `Você acertou ${acertos} de 3!`;
+            }
+        }
+
+        function escolherVale(vale) {
+            document.getElementById('valeChoice').innerHTML = `<p class="vale">Você escolheu: ${vale}. Que fofo! 💖</p>`;
+        }
+
+        mostrarPergunta();
+    </script>
+</body>
+</html>
